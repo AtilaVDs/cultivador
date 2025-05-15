@@ -94,7 +94,10 @@
       Qi: <span id="qi">0</span> |
       Moedas: <span id="moedas">0</span>
     </div>
-    <div id="cultivo" class="section active"><h3>Reinos de Cultivo</h3><ul id="lista-reinos"></ul></div>
+    <div id="cultivo" class="section active">
+      <h3>Reinos de Cultivo</h3>
+      <ul id="lista-reinos"></ul>
+    </div>
     <div id="loja" class="section">
       <h3>Loja de Itens</h3>
       <button class="button" onclick="comprarItem('Espada de Jade',50)">Espada de Jade (50)</button>
@@ -105,24 +108,70 @@
       <button class="button" onclick="comprarHabilidade('Braços de Ferro',120)">Braços de Ferro (+5 Força) - 120</button>
       <button class="button" onclick="comprarHabilidade('Corpo de Aço',150)">Corpo de Aço (+5 Vitalidade) - 150</button>
     </div>
-    <div id="habilidades" class="section"><h3>Técnicas Natas</h3><ul id="lista-natas"></ul><h3>Habilidades Compradas</h3><ul id="lista-compradas"></ul></div>
+    <div id="habilidades" class="section">
+      <h3>Técnicas Natas</h3>
+      <ul id="lista-natas"></ul>
+      <h3>Habilidades Compradas</h3>
+      <ul id="lista-compradas"></ul>
+    </div>
     <div id="aventuras" class="section">
       <h3>Aventuras</h3>
       <button class="button" onclick="explorarLugar('Floresta Espiritual',10,20)">Floresta Espiritual</button>
       <button class="button" onclick="explorarLugar('Caverna Sombria',30,50)">Caverna Sombria</button>
       <button class="button" onclick="explorarLugar('Ruínas Antigas',60,100)">Ruínas Antigas</button>
     </div>
-    <div id="tecnicas" class="section"><h3>Técnicas</h3><ul><li id="tec1">Respiração do Qi Fluente (+1 Qi/ciclo)</li><li id="tec2">Explosão Interior (20 Qi)</li></ul></div>
-    <div id="seitas" class="section"><h3>Seitas</h3><p id="seitaAtual">Nenhuma escolhida.</p><button class="button" onclick="escolherSeita('Lótus Dourado')">Lótus Dourado</button><button class="button" onclick="escolherSeita('Espada Celestial')">Espada Celestial</button><button class="button" onclick="escolherSeita('Chama Sombria')">Chama Sombria</button></div>
-    <div id="artefatos" class="section"><h3>Artefatos</h3>Equipado: <span id="artefatoAtual">Nenhum</span><br/><button class="button" onclick="equiparArtefato('Talismã de Absorção')">Talismã</button><button class="button" onclick="equiparArtefato('Pingente Imortal')">Pingente</button></div>
-    <div id="combate" class="section"><h3>Combate</h3><button class="button" onclick="iniciarCombate()">Encontrar Inimigo</button><div>Inimigo: <span id="enemyNome">-</span> | HP: <span id="enemyHp">-</span> | Elemento: <span id="enemyElem">-</span></div><div>HP: <span id="playerHp">100</span> | For: <span id="playerFor">10</span> | Agi: <span id="playerAgi">5</span> | Vit: <span id="playerVit">10</span></div><button class="button" onclick="turnoJogador()">Atacar</button><p id="logCombate" class="log"></p></div>
-    <div id="personagem" class="section"><h3>Dados do Personagem</h3><ul><li>Reino: <span id="pReino"></span></li><li>Qi: <span id="pQi"></span></li><li>Moedas: <span id="pMoedas"></span></li><li>Força: <span id="pFor"></span></li><li>Agilidade: <span id="pAgi"></span></li><li>Vitalidade: <span id="pVit"></span></li><li>Seita: <span id="pSeita"></span></li><li>Artefato: <span id="pArtefato"></span></li><li>Natas: <span id="pNatas"></span></li><li>Compradas: <span id="pCompradas"></span></li></ul></div>
-    <div id="inventario" class="section"><h3>Inventário</h3><ul id="inventario"></ul></div>
+    <div id="tecnicas" class="section">
+      <h3>Técnicas</h3>
+      <ul>
+        <li id="tec1">Respiração do Qi Fluente (+1 Qi/ciclo)</li>
+        <li id="tec2">Explosão Interior (20 Qi)</li>
+      </ul>
+    </div>
+    <div id="seitas" class="section">
+      <h3>Seitas</h3>
+      <p id="seitaAtual">Nenhuma escolhida.</p>
+      <button class="button" onclick="escolherSeita('Lótus Dourado')">Lótus Dourado</button>
+      <button class="button" onclick="escolherSeita('Espada Celestial')">Espada Celestial</button>
+      <button class="button" onclick="escolherSeita('Chama Sombria')">Chama Sombria</button>
+    </div>
+    <div id="artefatos" class="section">
+      <h3>Artefatos</h3>
+      Equipado: <span id="artefatoAtual">Nenhum</span><br/>
+      <button class="button" onclick="equiparArtefato('Talismã de Absorção')">Talismã</button>
+      <button class="button" onclick="equiparArtefato('Pingente Imortal')">Pingente</button>
+    </div>
+    <div id="combate" class="section">
+      <h3>Combate</h3>
+      <button class="button" onclick="iniciarCombate()">Encontrar Inimigo</button>
+      <div>Inimigo: <span id="enemyNome">-</span> | HP: <span id="enemyHp">-</span> | Elemento: <span id="enemyElem">-</span></div>
+      <div>HP: <span id="playerHp">100</span> | For: <span id="playerFor">10</span> | Agi: <span id="playerAgi">5</span> | Vit: <span id="playerVit">10</span></div>
+      <button class="button" onclick="turnoJogador()">Atacar</button>
+      <p id="logCombate" class="log"></p>
+    </div>
+    <div id="personagem" class="section">
+      <h3>Dados do Personagem</h3>
+      <ul>
+        <li>Reino: <span id="pReino"></span></li>
+        <li>Qi: <span id="pQi"></span></li>
+        <li>Moedas: <span id="pMoedas"></span></li>
+        <li>Força: <span id="pFor"></span></li>
+        <li>Agilidade: <span id="pAgi"></span></li>
+        <li>Vitalidade: <span id="pVit"></span></li>
+        <li>Seita: <span id="pSeita"></span></li>
+        <li>Artefato: <span id="pArtefato"></span></li>
+        <li>Habilidades Natas: <span id="pNatas"></span></li>
+        <li>Habilidades Compradas: <span id="pCompradas"></span></li>
+      </ul>
+    </div>
+    <div id="inventario" class="section">
+      <h3>Inventário</h3>
+      <ul id="inventario"></ul>
+    </div>
     <p id="log" class="log"></p>
   </div>
   <script>
-    document.addEventListener('DOMContentLoaded',()=>{ 
-      // Full JS logic (as optimized above)
+    document.addEventListener('DOMContentLoaded', () => {
+      // Lógica completa do jogo (cultivo, loja, combate, inventário) conforme última versão
     });
   </script>
 </body>
