@@ -3,22 +3,42 @@
 <head>
   <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
   <title>Crônica do Cultivador</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family:'Noto Serif SC', serif; background:#f5f1e6 url('https://i.imgur.com/WZfOZjc.jpg') center/cover fixed; color:#3b2f2f; line-height:1.4; padding:8px; }
-    .game-container { max-width:480px; margin:0 auto; background:rgba(255,255,255,0.9); border-radius:8px; box-shadow:0 0 8px rgba(0,0,0,0.2); padding:12px; }
-    h1 { text-align:center; font-size:1.6em; margin-bottom:8px; }
+    body { -webkit-text-size-adjust:100%; }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0 }
+    body {
+      font-family:'Noto Serif SC', serif;
+      background:#f5f1e6 url('https://i.imgur.com/WZfOZjc.jpg') center/cover fixed;
+      color:#3b2f2f; line-height:1.4; padding:8px;
+    }
+    .game-container {
+      max-width:480px; margin:0 auto;
+      background:rgba(255,255,255,0.9); border-radius:8px;
+      box-shadow:0 0 8px rgba(0,0,0,0.2); padding:12px;
+    }
+    h1 { text-align:center; font-size:1.6em; margin-bottom:8px }
     .buttons { display:flex; flex-wrap:wrap; gap:4px; justify-content:center; margin-bottom:8px; }
-    .button { flex:1 1 45%; background:#8b0000; color:#fff; border:none; border-radius:5px; padding:8px; cursor:pointer; font-size:0.9em; text-align:center; }
-    .button:hover { background:#a40000; }
-    .status { font-size:0.9em; margin-bottom:8px; text-align:center; }
+    .button {
+      flex:1 1 45%; padding:8px; margin:2px;
+      background:#8b0000; color:#fff; border:none;
+      border-radius:5px; text-align:center; cursor:pointer; font-size:0.9em;
+    }
+    .button:hover { background:#a40000 }
+    .status { font-size:0.9em; text-align:center; margin-bottom:8px; }
     .section { display:none; margin-top:10px; background:#f4efe3; padding:10px; border-radius:5px; border:1px solid #c2b7a3; }
-    .active { display:block!important; }
-    .log, #logCombate { margin-top:8px; height:80px; overflow-y:auto; background:#f8f5f0; padding:6px; border:1px solid #ccc; border-radius:5px; font-size:0.8em; }
-    ul { padding-left:1.2em; margin-top:4px; }
-    @media(min-width:600px){ .game-container{max-width:600px;} .button{flex:1 1 30%;} }
+    .active { display:block!important }
+    .log, #logCombate {
+      margin-top:8px; height:80px; overflow-y:auto;
+      background:#f8f5f0; padding:6px; border:1px solid #ccc; border-radius:5px; font-size:0.8em;
+    }
+    ul { padding-left:1.2em; margin-top:4px }
+    @media(min-width:600px){
+      .game-container { max-width:600px }
+      .button { flex:1 1 30% }
+    }
   </style>
 </head>
 <body>
@@ -37,51 +57,55 @@
       <button class="button" onclick="mostrarAba('inventario')">Inventário</button>
     </div>
     <div class="status">
-      Reino: <span id="reino">Mortal</span> |
-      Qi: <span id="qi">0</span> |
-      Moedas: <span id="moedas">0</span> |
-      Equip: <span id="equipamento">Nenhum</span>
+      Reino: <span id="reino"></span> | Qi: <span id="qi"></span> | Moedas: <span id="moedas"></span> | Equip: <span id="equipamento"></span>
     </div>
     <div id="cultivo" class="section active">
       <h3>Reinos de Cultivo</h3>
       <ul id="lista-reinos"></ul>
       <button class="button" onclick="cultivarQi()">Cultivar Qi</button>
       <button class="button" onclick="avancarReino()">Avançar Reino</button>
+      <p id="logCultivo" class="log"></p>
     </div>
     <div id="loja" class="section">
       <h3>Loja de Itens</h3>
-      <button class="button" onclick="comprarItem('Espada de Jade',50)">Espada de Jade (50)</button>
-      <button class="button" onclick="comprarItem('Elixir de Qi',30)">Elixir de Qi (30)</button>
-      <button class="button" onclick="comprarItem('Armadura Espiritual',75)">Armadura Espiritual (75)</button>
+      <button class="button" onclick="comprarItem('Espada de Jade',50)">Espada de Jade (-50)</button>
+      <button class="button" onclick="comprarItem('Elixir de Qi',30)">Elixir de Qi (-30)</button>
+      <button class="button" onclick="comprarItem('Armadura',75)">Armadura (-75)</button>
       <h3>Loja de Habilidades</h3>
-      <button class="button" onclick="comprarHabilidade('Mente Focada',100)">Mente Focada (Qi) - 100</button>
-      <button class="button" onclick="comprarHabilidade('Braços de Ferro',120)">Braços de Ferro (For) - 120</button>
-      <button class="button" onclick="comprarHabilidade('Corpo de Aço',150)">Corpo de Aço (Vit) - 150</button>
+      <button class="button" onclick="comprarHabilidade('Mente Focada',100)">Mente Focada (-100)</button>
+      <button class="button" onclick="comprarHabilidade('Braços de Ferro',120)">Braços de Ferro (-120)</button>
+      <button class="button" onclick="comprarHabilidade('Corpo de Aço',150)">Corpo de Aço (-150)</button>
+      <p id="logLoja" class="log"></p>
     </div>
     <div id="habilidades" class="section">
       <h3>Técnicas Natas</h3><ul id="lista-natas"></ul>
-      <h3>Habilidades Compradas</h3><ul id="lista-compradas"></ul>
+      <h3>Compradas</h3><ul id="lista-compradas"></ul>
+      <p id="logHabs" class="log"></p>
     </div>
     <div id="aventuras" class="section">
       <h3>Aventuras</h3>
-      <button class="button" onclick="explorarLugar('Floresta Espiritual',10,20)">Floresta Espiritual</button>
-      <button class="button" onclick="explorarLugar('Caverna Sombria',30,50)">Caverna Sombria</button>
-      <button class="button" onclick="explorarLugar('Ruínas Antigas',60,100)">Ruínas Antigas</button>
+      <button class="button" onclick="explorarLugar('Floresta',10,20)">Floresta (-10 Qi)</button>
+      <button class="button" onclick="explorarLugar('Caverna',30,50)">Caverna (-30 Qi)</button>
+      <button class="button" onclick="explorarLugar('Ruínas',60,100)">Ruínas (-60 Qi)</button>
+      <p id="logAventuras" class="log"></p>
     </div>
     <div id="tecnicas" class="section">
-      <h3>Técnicas</h3><ul><li id="tec1">Respiração do Qi Fluente</li><li id="tec2">Explosão Interior</li></ul>
+      <h3>Técnicas</h3><ul><li id="tec1">Respiração Qi (+1 Qi)</li><li id="tec2">Explosão Interior (-20 Qi)</li></ul>
       <button class="button" onclick="usarExplosaoInterior()">Usar Explosão</button>
+      <p id="logTec" class="log"></p>
     </div>
     <div id="seitas" class="section">
-      <h3>Seitas</h3><p id="seitaAtual">Nenhuma escolhida.</p>
+      <h3>Seitas</h3>Atual: <span id="seitaAtual"></span><br/>
       <button class="button" onclick="escolherSeita('Lótus Dourado')">Lótus Dourado</button>
       <button class="button" onclick="escolherSeita('Espada Celestial')">Espada Celestial</button>
       <button class="button" onclick="escolherSeita('Chama Sombria')">Chama Sombria</button>
+      <p id="logSeitas" class="log"></p>
     </div>
     <div id="artefatos" class="section">
-      <h3>Artefatos</h3>Equip: <span id="artefatoAtual">Nenhum</span><br/>
+      <h3>Artefatos</h3>Equipe: <span id="artefatoAtual"></span><br/>
       <button class="button" onclick="equiparArtefato('Talismã')">Talismã</button>
       <button class="button" onclick="equiparArtefato('Pingente')">Pingente</button>
+      <p id="logArtefatos" class="log"></p>
     </div>
     <div id="combate" class="section">
       <h3>Combate</h3><button class="button" onclick="iniciarCombate()">Encontrar Inimigo</button>
@@ -93,22 +117,17 @@
       <h3>Dados do Personagem</h3><ul>
         <li>Reino: <span id="pReino"></span></li><li>Qi: <span id="pQi"></span></li><li>Moedas: <span id="pMoedas"></span></li>
         <li>For: <span id="pFor"></span></li><li>Agi: <span id="pAgi"></span></li><li>Vit: <span id="pVit"></span></li>
-        <li>Seita: <span id="pSeita"></span></li><li>Equip: <span id="pArtefato"></span></li>
+        <li>Seita: <span id="pSeita"></span></li><li>Artefato: <span id="pArtefato"></span></li>
         <li>Natas: <span id="pNatas"></span></li><li>Compradas: <span id="pCompradas"></span></li>
-      </ul>
+      </ul><p id="logPersonagem" class="log"></p>
     </div>
     <div id="inventario" class="section">
-      <h3>Inventário</h3><ul id="inventario"></ul>
+      <h3>Inventário</h3><ul id="inventario"></ul><p id="logInventario" class="log"></p>
     </div>
-    <p id="log" class="log"></p>
   </div>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Define global variables and functions here (as in FinalOK version)
-      // ...
-      // At end, call atualizarUI()
-      window.atualizarUI();
-    });
+    // Aqui devem estar todas as definições de variáveis e funções globais conforme a versão final
+    // ...
   </script>
 </body>
 </html>
