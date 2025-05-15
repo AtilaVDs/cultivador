@@ -92,12 +92,15 @@
     <div class="status">
       Reino: <span id="reino">Mortal</span> |
       Qi: <span id="qi">0</span> |
-      Moedas: <span id="moedas">0</span>
+      Moedas: <span id="moedas">0</span> |
+      Equip: <span id="equipamento">Nenhum</span>
     </div>
+
     <div id="cultivo" class="section active">
       <h3>Reinos de Cultivo</h3>
       <ul id="lista-reinos"></ul>
     </div>
+
     <div id="loja" class="section">
       <h3>Loja de Itens</h3>
       <button class="button" onclick="comprarItem('Espada de Jade',50)">Espada de Jade (50)</button>
@@ -108,18 +111,21 @@
       <button class="button" onclick="comprarHabilidade('Braços de Ferro',120)">Braços de Ferro (+5 Força) - 120</button>
       <button class="button" onclick="comprarHabilidade('Corpo de Aço',150)">Corpo de Aço (+5 Vitalidade) - 150</button>
     </div>
+
     <div id="habilidades" class="section">
       <h3>Técnicas Natas</h3>
       <ul id="lista-natas"></ul>
       <h3>Habilidades Compradas</h3>
       <ul id="lista-compradas"></ul>
     </div>
+
     <div id="aventuras" class="section">
       <h3>Aventuras</h3>
       <button class="button" onclick="explorarLugar('Floresta Espiritual',10,20)">Floresta Espiritual</button>
       <button class="button" onclick="explorarLugar('Caverna Sombria',30,50)">Caverna Sombria</button>
       <button class="button" onclick="explorarLugar('Ruínas Antigas',60,100)">Ruínas Antigas</button>
     </div>
+
     <div id="tecnicas" class="section">
       <h3>Técnicas</h3>
       <ul>
@@ -127,6 +133,7 @@
         <li id="tec2">Explosão Interior (20 Qi)</li>
       </ul>
     </div>
+
     <div id="seitas" class="section">
       <h3>Seitas</h3>
       <p id="seitaAtual">Nenhuma escolhida.</p>
@@ -134,20 +141,27 @@
       <button class="button" onclick="escolherSeita('Espada Celestial')">Espada Celestial</button>
       <button class="button" onclick="escolherSeita('Chama Sombria')">Chama Sombria</button>
     </div>
+
     <div id="artefatos" class="section">
       <h3>Artefatos</h3>
       Equipado: <span id="artefatoAtual">Nenhum</span><br/>
       <button class="button" onclick="equiparArtefato('Talismã de Absorção')">Talismã</button>
       <button class="button" onclick="equiparArtefato('Pingente Imortal')">Pingente</button>
     </div>
+
     <div id="combate" class="section">
       <h3>Combate</h3>
       <button class="button" onclick="iniciarCombate()">Encontrar Inimigo</button>
-      <div>Inimigo: <span id="enemyNome">-</span> | HP: <span id="enemyHp">-</span> | Elemento: <span id="enemyElem">-</span></div>
-      <div>HP: <span id="playerHp">100</span> | For: <span id="playerFor">10</span> | Agi: <span id="playerAgi">5</span> | Vit: <span id="playerVit">10</span></div>
+      <div class="enemy-stats">
+        Inimigo: <span id="enemyNome">-</span> | HP: <span id="enemyHp">-</span> | Elemento: <span id="enemyElem">-</span>
+      </div>
+      <div class="stats">
+        HP: <span id="playerHp">100</span> | For: <span id="playerFor">10</span> | Agi: <span id="playerAgi">5</span> | Vit: <span id="playerVit">10</span>
+      </div>
       <button class="button" onclick="turnoJogador()">Atacar</button>
       <p id="logCombate" class="log"></p>
     </div>
+
     <div id="personagem" class="section">
       <h3>Dados do Personagem</h3>
       <ul>
@@ -163,15 +177,196 @@
         <li>Habilidades Compradas: <span id="pCompradas"></span></li>
       </ul>
     </div>
+
     <div id="inventario" class="section">
       <h3>Inventário</h3>
       <ul id="inventario"></ul>
     </div>
+
     <p id="log" class="log"></p>
   </div>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Lógica completa do jogo (cultivo, loja, combate, inventário) conforme última versão
+      // Variables
+      let qi = 0, moedas = 0, reinoIndex = 0, equipamento = 'Nenhum', seita = null, artefato = null;
+      let inventory = [], purchasedSkills = [];
+      const reinos = ['Mortal','Refinamento de Qi','Fundação','Núcleo Dourado','Alma Nascente','Transformação Espiritual','Ascensão','Imortal Verdadeiro'];
+      const qiPorReino = [0,100,300,1000,3000,10000,50000,99999];
+      const innateSkills = [{name:'Visão Interna',realm:1},{name:'Corpo Resiliente',realm:2},{name:'Força Espiritual',realm:3}];
+      let player = {hp:100,maxHp:100,for:10,agi:5,vit:10,critChance:0.2,esquivaChance:0.15};
+
+      const inimigos = [
+        {nome:'Cobra Sombria',hp:60,elemento:'gelo',fraqueza:'fogo',drop:'Presas Gélidas',equipDrop:'Espada de Gelo',value:50},
+        {nome:'Javali Flamejante',hp:80,elemento:'fogo',fraqueza:'agua',drop:'Couro Flamejante',equipDrop:'Escudo Flamejante',value:75},
+        {nome:'Guardião de Pedra',hp:100,elemento:'terra',fraqueza:'vento',drop:'Fragmento Rúnico',equipDrop:'Armadura de Pedra',value:100}
+      ];
+      let inimigo = null;
+
+      // Helpers
+      function log(msg, area='log') {
+        const box = document.getElementById(area);
+        box.innerHTML = `<div>> ${msg}</div>` + box.innerHTML;
+      }
+      function mostrarAba(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        atualizarUI();
+      }
+      function atualizarUI() {
+        document.getElementById('qi').textContent = qi;
+        document.getElementById('moedas').textContent = moedas;
+        document.getElementById('equipamento').textContent = equipamento;
+
+        // Cultivo
+        const lr = document.getElementById('lista-reinos'); lr.innerHTML = '';
+        reinos.forEach((r,i) => {
+          const li = document.createElement('li');
+          li.textContent = `${r} — Qi: ${qiPorReino[i]||'-'}`;
+          if(i===reinoIndex) li.style.fontWeight = 'bold';
+          lr.appendChild(li);
+        });
+
+        // Habilidades
+        const ln = document.getElementById('lista-natas'), lc = document.getElementById('lista-compradas');
+        ln.innerHTML=''; lc.innerHTML='';
+        innateSkills.filter(s=>reinoIndex>=s.realm).forEach(s=>{
+          const li=document.createElement('li'); li.textContent=s.name; ln.appendChild(li);
+        });
+        purchasedSkills.forEach(s=>{
+          const li=document.createElement('li'); li.textContent=s.name; lc.appendChild(li);
+        });
+
+        // Inventário
+        const inv = document.getElementById('inventario'); inv.innerHTML='';
+        inventory.forEach((item,i)=>{
+          const li = document.createElement('li');
+          li.textContent = item.name + ' ';
+          const btE = document.createElement('button'); btE.textContent='Equipar'; btE.onclick = ()=>{ equipamento=item.name; log(`Equipou ${item.name}`); atualizarUI(); };
+          const btS = document.createElement('button'); btS.textContent='Vender'; btS.onclick = ()=>{ moedas+=item.value; log(`Vendeu ${item.name} por ${item.value}`); inventory.splice(i,1); atualizarUI(); };
+          li.appendChild(btE); li.appendChild(btS);
+          inv.appendChild(li);
+        });
+
+        // Personagem
+        document.getElementById('pReino').textContent = reinos[reinoIndex];
+        document.getElementById('pQi').textContent = qi;
+        document.getElementById('pMoedas').textContent = moedas;
+        document.getElementById('pFor').textContent = player.for;
+        document.getElementById('pAgi').textContent = player.agi;
+        document.getElementById('pVit').textContent = player.vit;
+        document.getElementById('pSeita').textContent = seita||'-';
+        document.getElementById('pArtefato').textContent = artefato||'-';
+        document.getElementById('pNatas').textContent = innateSkills.filter(s=>reinoIndex>=s.realm).map(s=>s.name).join(', ')||'-';
+        document.getElementById('pCompradas').textContent = purchasedSkills.map(s=>s.name).join(', ')||'-';
+
+        // Combate UI
+        if(inimigo){
+          document.getElementById('enemyNome').textContent = inimigo.nome;
+          document.getElementById('enemyHp').textContent = inimigo.hpAtual;
+          document.getElementById('enemyElem').textContent = inimigo.elemento;
+        } else {
+          document.getElementById('enemyNome').textContent = '-';
+          document.getElementById('enemyHp').textContent = '-';
+          document.getElementById('enemyElem').textContent = '-';
+        }
+        document.getElementById('playerHp').textContent = player.hp;
+        document.getElementById('playerFor').textContent = player.for;
+        document.getElementById('playerAgi').textContent = player.agi;
+        document.getElementById('playerVit').textContent = player.vit;
+      }
+
+      // Ações
+      function cultivarQi(){
+        qi += 1 + reinoIndex;
+        log(`+${1+reinoIndex} Qi`);
+        atualizarUI();
+      }
+      setInterval(cultivarQi, 3000);
+
+      function avancarReino(){
+        const custo = qiPorReino[reinoIndex+1]||Infinity;
+        if(qi>=custo){ qi-=custo; reinoIndex++; log(`Avançou para ${reinos[reinoIndex]}`); }
+        else log('Qi insuficiente');
+        atualizarUI();
+      }
+
+      function comprarItem(name, price){
+        if(moedas>=price){ moedas-=price; equipamento=name; log(`Comprou ${name}`); }
+        else log('Moedas insuficientes');
+        atualizarUI();
+      }
+
+      function comprarHabilidade(name, price){
+        if(moedas>=price){ moedas-=price; purchasedSkills.push({name,price}); log(`Comprou ${name}`); }
+        else log('Moedas insuficientes');
+        atualizarUI();
+      }
+
+      function explorarLugar(name, cost, reward){
+        if(qi>=cost){ qi-=cost; const r=Math.floor(Math.random()*reward); moedas+=r; log(`Explorou ${name} e ganhou ${r}`); }
+        else log('Qi insuficiente');
+        atualizarUI();
+      }
+
+      function usarExplosaoInterior(){
+        if(qi>=20){ qi-=20; log('Explosão Interior usada'); }
+        else log('Qi insuficiente');
+        atualizarUI();
+      }
+
+      function escolherSeita(name){ seita=name; log(`Seita ${name}`); atualizarUI(); }
+      function equiparArtefato(name){ artefato=name; log(`Equipou ${name}`); atualizarUI(); }
+
+      function iniciarCombate(){
+        const i = Math.floor(Math.random()*inimigos.length);
+        inimigo = {...inimigos[i],hpAtual:inimigos[i].hp};
+        log(`Encontrou ${inimigo.nome}`, 'logCombate');
+        atualizarUI();
+      }
+
+      function turnoJogador(){
+        if(!inimigo) return;
+        if(Math.random()<player.esquivaChance){ log('Você esquivou', 'logCombate'); turnoInimigo(); return; }
+        let dmg = player.for;
+        if(Math.random()<player.critChance){ dmg*=2; log('Crítico!', 'logCombate'); }
+        if(inimigo.fraqueza==='fogo' && inimigo.elemento==='gelo'){ dmg+=5; log('Dano por fraqueza!', 'logCombate'); }
+        inimigo.hpAtual -= dmg; log(`Você causou ${dmg}`, 'logCombate');
+        if(inimigo.hpAtual<=0){
+          log(`Derrotou ${inimigo.nome}`, 'logCombate');
+          moedas += inimigo.value; inventory.push({name: inimigo.equipDrop, value: inimigo.value});
+          log(`Obteve ${inimigo.equipDrop}`, 'logCombate');
+          inimigo = null; atualizarUI(); return;
+        }
+        turnoInimigo();
+      }
+
+      function turnoInimigo(){
+        if(!inimigo) return;
+        if(Math.random()<player.esquivaChance){ log('Você esquivou', 'logCombate'); return; }
+        const d = Math.floor(Math.random()*15)+5; player.hp -= d; log(`${inimigo.nome} causou ${d}`, 'logCombate');
+        if(player.hp<=0){ player.hp=0; log('Você morreu', 'logCombate'); }
+        atualizarUI();
+      }
+
+      // Eventos de persistência
+      window.addEventListener('beforeunload', ()=>{
+        localStorage.setItem('jogoSave', JSON.stringify({qi,moedas,reinoIndex,equipamento,seita,artefato,inventory,purchasedSkills,player}));
+      });
+      window.addEventListener('load', ()=>{
+        const data = JSON.parse(localStorage.getItem('jogoSave') || '{}');
+        if(data.qi !== undefined){
+          qi = data.qi; moedas = data.moedas; reinoIndex = data.reinoIndex;
+          equipamento = data.equipamento; seita = data.seita; artefato = data.artefato;
+          inventory = data.inventory || []; purchasedSkills = data.purchasedSkills || []; player = data.player || player;
+          log('Progresso carregado');
+        }
+        atualizarUI();
+      });
+
+      // Inicialização
+      atualizarUI();
+
     });
   </script>
 </body>
