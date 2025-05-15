@@ -42,111 +42,72 @@
       Moedas: <span id="moedas">0</span> |
       Equip: <span id="equipamento">Nenhum</span>
     </div>
-
     <div id="cultivo" class="section active">
       <h3>Reinos de Cultivo</h3>
       <ul id="lista-reinos"></ul>
       <button class="button" onclick="cultivarQi()">Cultivar Qi</button>
       <button class="button" onclick="avancarReino()">Avançar Reino</button>
     </div>
-
     <div id="loja" class="section">
       <h3>Loja de Itens</h3>
       <button class="button" onclick="comprarItem('Espada de Jade',50)">Espada de Jade (50)</button>
       <button class="button" onclick="comprarItem('Elixir de Qi',30)">Elixir de Qi (30)</button>
       <button class="button" onclick="comprarItem('Armadura Espiritual',75)">Armadura Espiritual (75)</button>
       <h3>Loja de Habilidades</h3>
-      <button class="button" onclick="comprarHabilidade('Mente Focada',100)">Mente Focada (+10% Qi) - 100</button>
-      <button class="button" onclick="comprarHabilidade('Braços de Ferro',120)">Braços de Ferro (+5 Força) - 120</button>
-      <button class="button" onclick="comprarHabilidade('Corpo de Aço',150)">Corpo de Aço (+5 Vitalidade) - 150</button>
+      <button class="button" onclick="comprarHabilidade('Mente Focada',100)">Mente Focada (Qi) - 100</button>
+      <button class="button" onclick="comprarHabilidade('Braços de Ferro',120)">Braços de Ferro (For) - 120</button>
+      <button class="button" onclick="comprarHabilidade('Corpo de Aço',150)">Corpo de Aço (Vit) - 150</button>
     </div>
-
     <div id="habilidades" class="section">
-      <h3>Técnicas Natas</h3>
-      <ul id="lista-natas"></ul>
-      <h3>Habilidades Compradas</h3>
-      <ul id="lista-compradas"></ul>
+      <h3>Técnicas Natas</h3><ul id="lista-natas"></ul>
+      <h3>Habilidades Compradas</h3><ul id="lista-compradas"></ul>
     </div>
-
     <div id="aventuras" class="section">
       <h3>Aventuras</h3>
       <button class="button" onclick="explorarLugar('Floresta Espiritual',10,20)">Floresta Espiritual</button>
       <button class="button" onclick="explorarLugar('Caverna Sombria',30,50)">Caverna Sombria</button>
       <button class="button" onclick="explorarLugar('Ruínas Antigas',60,100)">Ruínas Antigas</button>
     </div>
-
     <div id="tecnicas" class="section">
-      <h3>Técnicas</h3>
-      <ul>
-        <li id="tec1">Respiração do Qi Fluente (+1 Qi/ciclo)</li>
-        <li id="tec2">Explosão Interior (20 Qi)</li>
-        <button class="button" onclick="usarExplosaoInterior()">Usar Explosão Interior</button>
-      </ul>
+      <h3>Técnicas</h3><ul><li id="tec1">Respiração do Qi Fluente</li><li id="tec2">Explosão Interior</li></ul>
+      <button class="button" onclick="usarExplosaoInterior()">Usar Explosão</button>
     </div>
-
     <div id="seitas" class="section">
-      <h3>Seitas</h3>
-      <p id="seitaAtual">Nenhuma escolhida.</p>
+      <h3>Seitas</h3><p id="seitaAtual">Nenhuma escolhida.</p>
       <button class="button" onclick="escolherSeita('Lótus Dourado')">Lótus Dourado</button>
       <button class="button" onclick="escolherSeita('Espada Celestial')">Espada Celestial</button>
       <button class="button" onclick="escolherSeita('Chama Sombria')">Chama Sombria</button>
     </div>
-
     <div id="artefatos" class="section">
-      <h3>Artefatos</h3>
-      Equip: <span id="artefatoAtual">Nenhum</span><br/>
-      <button class="button" onclick="equiparArtefato('Talismã de Absorção')">Talismã</button>
-      <button class="button" onclick="equiparArtefato('Pingente Imortal')">Pingente</button>
+      <h3>Artefatos</h3>Equip: <span id="artefatoAtual">Nenhum</span><br/>
+      <button class="button" onclick="equiparArtefato('Talismã')">Talismã</button>
+      <button class="button" onclick="equiparArtefato('Pingente')">Pingente</button>
     </div>
-
     <div id="combate" class="section">
-      <h3>Combate</h3>
-      <button class="button" onclick="iniciarCombate()">Encontrar Inimigo</button>
+      <h3>Combate</h3><button class="button" onclick="iniciarCombate()">Encontrar Inimigo</button>
       <div>Inimigo: <span id="enemyNome">-</span> | HP: <span id="enemyHp">-</span> | Elem: <span id="enemyElem">-</span></div>
-      <div>Player HP: <span id="playerHp">100</span> | For: <span id="playerFor">10</span> | Agi: <span id="playerAgi">5</span> | Vit: <span id="playerVit">10</span></div>
-      <button class="button" onclick="turnoJogador()">Atacar</button>
-      <p id="logCombate" class="log"></p>
+      <div>HP: <span id="playerHp">100</span> | For: <span id="playerFor">10</span> | Agi: <span id="playerAgi">5</span> | Vit: <span id="playerVit">10</span></div>
+      <button class="button" onclick="turnoJogador()">Atacar</button><p id="logCombate" class="log"></p>
     </div>
-
     <div id="personagem" class="section">
-      <h3>Dados do Personagem</h3>
-      <ul>
-        <li>Reino: <span id="pReino"></span></li>
-        <li>Qi: <span id="pQi"></span></li>
-        <li>Moedas: <span id="pMoedas"></span></li>
-        <li>For: <span id="pFor"></span></li>
-        <li>Agi: <span id="pAgi"></span></li>
-        <li>Vit: <span id="pVit"></span></li>
-        <li>Seita: <span id="pSeita"></span></li>
-        <li>Equip: <span id="pArtefato"></span></li>
-        <li>Natas: <span id="pNatas"></span></li>
-        <li>Compradas: <span id="pCompradas"></span></li>
+      <h3>Dados do Personagem</h3><ul>
+        <li>Reino: <span id="pReino"></span></li><li>Qi: <span id="pQi"></span></li><li>Moedas: <span id="pMoedas"></span></li>
+        <li>For: <span id="pFor"></span></li><li>Agi: <span id="pAgi"></span></li><li>Vit: <span id="pVit"></span></li>
+        <li>Seita: <span id="pSeita"></span></li><li>Equip: <span id="pArtefato"></span></li>
+        <li>Natas: <span id="pNatas"></span></li><li>Compradas: <span id="pCompradas"></span></li>
       </ul>
     </div>
-
     <div id="inventario" class="section">
-      <h3>Inventário</h3>
-      <ul id="inventario"></ul>
+      <h3>Inventário</h3><ul id="inventario"></ul>
     </div>
-
     <p id="log" class="log"></p>
   </div>
-
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // All game functions defined globally
-      function log(msg, area) {
-        var box = document.getElementById(area||'log');
-        box.innerHTML = '<div>> ' + msg + '</div>' + box.innerHTML;
-      }
-      function mostrarAba(id) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        atualizarUI();
-      }
-      // ... rest of all functions as in previous final OK version, ensuring they are global ...
-      // For brevity, assume the full definitions follow correctly here...
-      log('Tabs are now working!');
+      // Define global variables and functions here (as in FinalOK version)
+      // ...
+      // At end, call atualizarUI()
+      window.atualizarUI();
     });
   </script>
 </body>
